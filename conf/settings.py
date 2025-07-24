@@ -19,10 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Apps criados por mim
-    'apps.operacao',
-    'apps.usuario'
+    'apps.usuario',
+    'apps.operacao'
 ]
 
 MIDDLEWARE = [
@@ -85,3 +83,6 @@ MEDIA_URL = '/media/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL = 'usuario.Usuario'
