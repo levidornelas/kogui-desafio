@@ -1,0 +1,17 @@
+.bg-primary,
+.btn-primary {
+  background: linear-gradient(45deg, rgb(123, 28, 201), rgb(67, 4, 129));
+  border-color: transparent;
+  color: white !important;
+}
+
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, rgb(123, 28, 201), rgb(67, 4, 129));
+  border-color: transparent;
+  color: white !important;
+}
+
+.text-primary {
+  color: indigo !important;
+}
