@@ -1,22 +1,24 @@
 from rest_framework import viewsets, mixins
 from rest_framework import permissions
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from django.contrib.auth import authenticate, login
 from .models import Usuario
 from .serializers import UsuarioSerializer
+from drf_spectacular.utils import extend_schema
 
 
+@extend_schema(tags=["Auth"])
 class CadastroUsuarioViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
   permission_classes = [permissions.AllowAny]
   queryset = Usuario.objects.all()
   serializer_class = UsuarioSerializer
 
 
-
-class LoginView(APIView):
+@extend_schema(tags=["Auth"])
+class LoginView(GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):

@@ -19,6 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'drf_spectacular',
     
     'apps.core',
     'apps.usuario',
@@ -92,6 +94,8 @@ LOGIN_URL = 'login'
 AUTH_USER_MODEL = 'usuario.Usuario'
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
 
@@ -99,4 +103,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Desafio Kogui - Calculadora Avançada',
+    'DESCRIPTION': 'Uma calculadora com autenticação por cadastro/login, que além de realizar operações, salva os resultados no banco de dados e permite visualizar o histórico de cálculos.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }

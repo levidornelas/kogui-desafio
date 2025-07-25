@@ -1,54 +1,45 @@
-{% csrf_token %}
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
-</head>
+{% block title %}Cadastro{% endblock %}
 
-<body class="bg-primary">
-  <div class="container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="row w-100 justify-content-center">
-      <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-        <div class="card shadow">
-          <div class="card-header bg-primary text-white text-center">
-            <h2 class="mb-0">Cadastro</h2>
-          </div>
-          <div class="card-body">
-            <form id="cadastro-form">
-              <div class="mb-3">
-                <label for="username" class="form-label">Usuário</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Usuário" required>
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
-              </div>
-              <button type="submit" class="btn btn-primary w-100 mb-3">Cadastrar</button>
-              <div class="text-center">
-                <p class="mb-0">Já tem uma conta? <a href="{% url 'login' %}" class="text-decoration-none">Fazer
-                    Login</a></p>
-              </div>
-            </form>
-            <div class="alert alert-success mt-3 d-none" id="msg-success" role="alert"></div>
-            <div class="alert alert-danger mt-3 d-none" id="msg-error" role="alert"></div>
-          </div>
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+  <div class="row w-100 justify-content-center">
+    <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h2 class="mb-0">Cadastro</h2>
+        </div>
+        <div class="card-body">
+          <form id="cadastro-form">
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuário</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Usuário" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Senha</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">Cadastrar</button>
+            <div class="text-center">
+              <p class="mb-0">Já tem uma conta? <a href="{% url 'login' %}" class="text-decoration-none">Fazer Login</a>
+              </p>
+            </div>
+          </form>
+          <div class="alert alert-success mt-3 d-none" id="msg-success" role="alert"></div>
+          <div class="alert alert-danger mt-3 d-none" id="msg-error" role="alert"></div>
         </div>
       </div>
     </div>
   </div>
+</div>
+{% endblock %}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-  <script src="{% static 'js/cadastro.js' %}"></script>
-</body>
-
-</html>
+{% block extra_js %}
+<script src="{% static 'js/cadastro.js' %}"></script>
+{% endblock %}

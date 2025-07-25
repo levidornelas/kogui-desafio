@@ -2,11 +2,12 @@ from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from drf_spectacular.utils import extend_schema
 
 from .models import Operacao
 from .serializers import OperacaoSerializer
 
-
+@extend_schema(tags=["Operações"])
 class OperacaoViewSet(viewsets.ModelViewSet):
   model = Operacao
   permission_classes = [permissions.IsAuthenticated]

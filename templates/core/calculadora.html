@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Calculadora Avançada{% endblock %}
+
+{% block fontawesome %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body_class %}text-white bg-primary{% endblock %}
+
+{% block head_js %}
+<script src="{% static 'js/calculadora.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <h1 class="text-center text-white mb-1">Olá, {{ request.user.username.capitalize }}! Bem vindo a Calculadora
+        Avançada</h1>
+      <p class="text-center mb-4">Calculadora com histórico de operações</p>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <!-- Calculadora -->
+    <div class="col-md-6 col-lg-5">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body p-4">
+          <!-- Display -->
+          <div class="mb-4">
+            <div class="form-control bg-secondary text-white text-end fs-2 border-0"
+              style="height: 80px; line-height: 60px;" id="display">0</div>
+          </div>
+          <!-- Botões -->
+          <div class="row g-2">
+            <!-- Primeira linha -->
+            <div class="col-3">
+              <button class="btn btn-danger w-100 py-3 fs-4" onclick="limparTudo()">C</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-secondary w-100 py-3 fs-4" disabled>±</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-secondary w-100 py-3 fs-4" disabled>%</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-primary w-100 py-3 fs-4" onclick="adicionarOperador('÷')">÷</button>
+            </div>
+            <!-- Segunda linha -->
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('7')">7</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('8')">8</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('9')">9</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-primary w-100 py-3 fs-4" onclick="adicionarOperador('×')">×</button>
+            </div>
+            <!-- Terceira linha -->
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('4')">4</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('5')">5</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('6')">6</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-primary w-100 py-3 fs-4" onclick="adicionarOperador('-')">-</button>
+            </div>
+            <!-- Quarta linha -->
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('1')">1</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('2')">2</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('3')">3</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-primary w-100 py-3 fs-4" onclick="adicionarOperador('+')">+</button>
+            </div>
+            <!-- Quinta linha -->
+            <div class="col-6">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarNumero('0')">0</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-dark w-100 py-3 fs-4" onclick="adicionarDecimal()">.</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-primary w-100 py-3 fs-4" onclick="calcular()">=</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Histórico -->
+    <div class="col-md-4 col-lg-3">
+      <div class="card bg-dark border-secondary">
+        <div class="card-header bg-primary text-white">
+          <i class="fas fa-history me-2"></i>Histórico
+          <button class="btn btn-sm btn-outline-light float-end" onclick="limparHistorico()">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        <div class="card-body p-3" style="height: 400px; overflow-y: auto;">
+          <div id="history">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

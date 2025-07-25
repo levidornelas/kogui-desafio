@@ -16,7 +16,7 @@ form.addEventListener('submit', async (e) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': getCookie('csrftoken')
+        'X-CSRFToken': window.csrftoken
       },
       body: JSON.stringify(data),
     });
@@ -24,8 +24,8 @@ form.addEventListener('submit', async (e) => {
     if (response.ok) {
       window.location.href = "/calculadora/";
     } else {
-      const res = await response.json();
-      msg.textContent = res.detail || 'Falha no login';
+      const data = await response.json();
+      msg.textContent = data.detail || 'Falha no login';
       msg.classList.remove('d-none');
     }
   } catch (err) {
@@ -34,17 +34,3 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}

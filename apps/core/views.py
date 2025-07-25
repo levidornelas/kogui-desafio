@@ -11,4 +11,4 @@ class CadastroPageView(TemplateView):
 
 
 class CalculadoraView(LoginRequiredMixin, TemplateView):
-    template_name = 'calculadora.html'
+    template_name = 'core/calculadora.html'

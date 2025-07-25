@@ -1,86 +1,86 @@
-let currentInput = '0';
-let previousInput = '';
-let operator = '';
-let waitingForNewNumber = false;
+let inputAtual = '0';
+let inputAnterior = '';
+let operador = '';
+let aguardandoNovoNumero = false;
 
 // Carregar histórico ao inicializar a página
 document.addEventListener('DOMContentLoaded', function () {
-  loadHistory();
+  carregarHistorico();
 });
 
-function updateDisplay() {
-  document.getElementById('display').textContent = currentInput;
+function atualizarDisplay() {
+  document.getElementById('display').textContent = inputAtual;
 }
 
-function addNumber(num) {
-  if (waitingForNewNumber) {
-    currentInput = num;
-    waitingForNewNumber = false;
+function adicionarNumero(num) {
+  if (aguardandoNovoNumero) {
+    inputAtual = num;
+    aguardandoNovoNumero = false;
   } else {
-    currentInput = currentInput === '0' ? num : currentInput + num;
+    inputAtual = inputAtual === '0' ? num : inputAtual + num;
   }
-  updateDisplay();
+  atualizarDisplay();
 }
 
-function addDecimal() {
-  if (waitingForNewNumber) {
-    currentInput = '0.';
-    waitingForNewNumber = false;
-  } else if (currentInput.indexOf('.') === -1) {
-    currentInput += '.';
+function adicionarDecimal() {
+  if (aguardandoNovoNumero) {
+    inputAtual = '0.';
+    aguardandoNovoNumero = false;
+  } else if (inputAtual.indexOf('.') === -1) {
+    inputAtual += '.';
   }
-  updateDisplay();
+  atualizarDisplay();
 }
 
-function addOperator(op) {
-  if (operator && !waitingForNewNumber) {
-    calculate();
+function adicionarOperador(op) {
+  if (operador && !aguardandoNovoNumero) {
+    calcular();
   }
-  previousInput = currentInput;
-  operator = op;
-  waitingForNewNumber = true;
+  inputAnterior = inputAtual;
+  operador = op;
+  aguardandoNovoNumero = true;
 }
 
-async function calculate() {
-  if (operator && previousInput && !waitingForNewNumber) {
-    const prev = parseFloat(previousInput);
-    const current = parseFloat(currentInput);
-    let result;
+async function calcular() {
+  if (operador && inputAnterior && !aguardandoNovoNumero) {
+    const anterior = parseFloat(inputAnterior);
+    const atual = parseFloat(inputAtual);
+    let resultado;
 
-    switch (operator) {
+    switch (operador) {
       case '+':
-        result = prev + current;
+        resultado = anterior + atual;
         break;
       case '-':
-        result = prev - current;
+        resultado = anterior - atual;
         break;
       case '×':
-        result = prev * current;
+        resultado = anterior * atual;
         break;
       case '÷':
-        result = current !== 0 ? prev / current : 'Erro';
+        resultado = atual !== 0 ? anterior / atual : 'Erro';
         break;
       default:
         return;
     }
 
-    if (result !== 'Erro') {
+    if (resultado !== 'Erro') {
       // Salvar no banco de dados via API
-      await saveToDatabase(prev, operator, current, result);
+      await salvarNoBanco(anterior, operador, atual, resultado);
 
       // Recarregar histórico
-      loadHistory();
+      carregarHistorico();
     }
 
-    currentInput = result.toString();
-    operator = '';
-    previousInput = '';
-    waitingForNewNumber = true;
-    updateDisplay();
+    inputAtual = resultado.toString();
+    operador = '';
+    inputAnterior = '';
+    aguardandoNovoNumero = true;
+    atualizarDisplay();
   }
 }
 
-async function saveToDatabase(num1, op, num2, resultado) {
+async function salvarNoBanco(num1, op, num2, resultado) {
   try {
     const parametros = `${num1} ${op} ${num2}`;
 
@@ -88,7 +88,7 @@ async function saveToDatabase(num1, op, num2, resultado) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': getCookie('csrftoken')
+        'X-CSRFToken': window.csrftoken
       },
       body: JSON.stringify({
         parametros: parametros,
@@ -97,97 +97,69 @@ async function saveToDatabase(num1, op, num2, resultado) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Erro ao salvar operação:', errorData);
+      const dadosErro = await response.json();
+      console.error('Erro ao salvar operação:', dadosErro);
     }
-  } catch (error) {
-    console.error('Erro de conexão ao salvar operação:', error);
+  } catch (erro) {
+    console.error('Erro de conexão ao salvar operação:', erro);
   }
 }
 
-async function loadHistory() {
+async function carregarHistorico() {
   try {
     const response = await fetch('/api/operacoes/');
     if (response.ok) {
       const operacoes = await response.json();
-      renderHistory(operacoes);
+      renderizarHistorico(operacoes);
     }
-  } catch (error) {
-    console.error('Erro ao carregar histórico:', error);
+  } catch (erro) {
+    console.error('Erro ao carregar histórico:', erro);
   }
 }
 
-function renderHistory(operacoes) {
-  const historyDiv = document.getElementById('history');
-  historyDiv.innerHTML = '';
+function renderizarHistorico(operacoes) {
+  const divHistorico = document.getElementById('history');
+  divHistorico.innerHTML = '';
 
   // Mostrar apenas os últimos 10 itens
-  const recentOperacoes = operacoes.slice(-10).reverse();
+  const operacoesRecentes = operacoes.slice(-10).reverse();
 
-  recentOperacoes.forEach(operacao => {
-    const historyItem = document.createElement('div');
-    historyItem.className = 'mb-3';
+  operacoesRecentes.forEach(operacao => {
+    const itemHistorico = document.createElement('div');
+    itemHistorico.className = 'mb-3';
 
     const dataOperacao = new Date(operacao.data_inclusao);
-    const time = dataOperacao.toLocaleDateString('pt-BR', {
+    const horario = dataOperacao.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
       year: '2-digit'
     });
 
-    historyItem.innerHTML = `
+    itemHistorico.innerHTML = `
                     <div class="text-white-50 small">${operacao.parametros}</div>
                     <div class="text-white">= ${operacao.resultado}</div>
-                    <div class="text-white small">${time}</div>
+                    <div class="text-white small">${horario}</div>
                 `;
 
-    historyDiv.appendChild(historyItem);
+    divHistorico.appendChild(itemHistorico);
   });
 }
 
-function clearAll() {
-  currentInput = '0';
-  previousInput = '';
-  operator = '';
-  waitingForNewNumber = false;
-  updateDisplay();
+function limparTudo() {
+  inputAtual = '0';
+  inputAnterior = '';
+  operador = '';
+  aguardandoNovoNumero = false;
+  atualizarDisplay();
 }
 
-function toggleSign() {
-  if (currentInput !== '0') {
-    currentInput = currentInput.charAt(0) === '-' ?
-      currentInput.slice(1) : '-' + currentInput;
-    updateDisplay();
-  }
-}
-
-function percentage() {
-  currentInput = (parseFloat(currentInput) / 100).toString();
-  updateDisplay();
-}
-
-async function clearHistory() {
+async function limparHistorico() {
   await fetch('/api/operacoes/deletar_todas/', {
     method: 'DELETE',
     headers: {
-      'X-CSRFToken': getCookie('csrftoken')
+      'X-CSRFToken': window.csrftoken
     },
   });
 
   document.getElementById('history').innerHTML = '';
-}
-
-function getCookie(nome) {
-  let valorCookie = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, nome.length + 1) === (nome + '=')) {
-        valorCookie = decodeURIComponent(cookie.substring(nome.length + 1));
-        break;
-      }
-    }
-  }
-  return valorCookie;
 }
