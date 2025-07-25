@@ -1,6 +1,6 @@
 .bg-primary,
 .btn-primary {
-  background: linear-gradient(45deg, rgb(123, 28, 201), rgb(67, 4, 129));
+  background: linear-gradient(100deg, rgb(123, 28, 201), rgb(67, 4, 129));
   border-color: transparent;
   color: white !important;
 }
